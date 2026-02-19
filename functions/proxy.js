@@ -2,7 +2,7 @@ const fetch = require("node-fetch");
 
 exports.handler = async (event) => {
   try {
-    const backendUrl = "http://YOUR_BACKEND_HOST" + event.path.replace(/^\/\.netlify\/functions\/proxy/, "");
+    const backendUrl = "http://pdf-backend-env.eba-cauaw3hk.eu-north-1.elasticbeanstalk.com" + event.path.replace(/^\/\.netlify\/functions\/proxy/, "");
     
     const options = {
       method: event.httpMethod,
