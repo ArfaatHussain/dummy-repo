@@ -1,9 +1,24 @@
 const fetch = require("node-fetch");
 
 exports.handler = async (event) => {
+  // ⚠️ Handle preflight OPTIONS request
+  if (event.httpMethod === "OPTIONS") {
+    return {
+      statusCode: 200,
+      headers: {
+        "Access-Control-Allow-Origin": "*",
+        "Access-Control-Allow-Methods": "GET,POST,PUT,DELETE,OPTIONS",
+        "Access-Control-Allow-Headers": "Content-Type, Authorization",
+      },
+      body: "",
+    };
+  }
+
   try {
-    const backendUrl = "http://pdf-backend-env.eba-cauaw3hk.eu-north-1.elasticbeanstalk.com" + event.path.replace(/^\/\.netlify\/functions\/proxy/, "");
-    
+    const backendUrl =
+      "http://pdf-backend-env.eba-cauaw3hk.eu-north-1.elasticbeanstalk.com" +
+      event.path.replace(/^\/\.netlify\/functions\/proxy/, "");
+
     const options = {
       method: event.httpMethod,
       headers: event.headers,
@@ -17,6 +32,7 @@ exports.handler = async (event) => {
       statusCode: response.status,
       headers: {
         "Access-Control-Allow-Origin": "*",
+        "Access-Control-Allow-Methods": "GET,POST,PUT,DELETE,OPTIONS",
         "Access-Control-Allow-Headers": "Content-Type, Authorization",
       },
       body: text,
@@ -24,6 +40,11 @@ exports.handler = async (event) => {
   } catch (err) {
     return {
       statusCode: 500,
+      headers: {
+        "Access-Control-Allow-Origin": "*",
+        "Access-Control-Allow-Methods": "GET,POST,PUT,DELETE,OPTIONS",
+        "Access-Control-Allow-Headers": "Content-Type, Authorization",
+      },
       body: "Proxy error: " + err.message,
     };
   }
